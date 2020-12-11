@@ -1,5 +1,5 @@
 # Resutaurant Management System (RMS)
-## Execute
+## Execute RMS.java file
 ## Login is not required Currently disabled
 ## User Directly Manage all the data information
 
