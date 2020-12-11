@@ -1,0 +1,6 @@
+*********** Order List (2020_12_10) ***********
+Order ID:   1  StaffName:Vipul J      Total:$35.0 State:1
+Order ID:   2  StaffName:Anup K      Total:$1315.0 State:1
+Order ID:   3  StaffName:Prince K     Total:$36.0 State:2
+-------------------------------------------------------
+Total sales:$1350.0  Canceled:$36.0(1)
