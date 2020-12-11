@@ -8,14 +8,14 @@ public class Controller
     //define scene
     public final static int SCENE_MAIN_MENU = 0;    //main menu
     public final static int SCENE_LOGIN = 1;        //login
-    public final static int SCENE_LOGOUT = 2;
+    public final static int SCENE_EDIT_TABLE = 2;
     public final static int SCENE_MENU_LIST = 3;
     public final static int SCENE_ORDER = 4;
     public final static int SCENE_EMPLOYEE_LIST = 5;
     public final static int SCENE_EDIT_EMPLOYEE = 6;
     public final static int SCENE_EDIT_MENU_ITEM = 7;
     public final static int SCENE_TABLE = 8;
-    public final static int SCENE_EDIT_TABLE = 9;
+    public final static int SCENE_BOOKING = 9;
 
 
     //define user type
@@ -160,10 +160,10 @@ public class Controller
                    selectMenu();
                    break;
                 case SCENE_LOGIN:
-                    userLogin();
+                    chooseEditBookingMode();
                     break;
-                case SCENE_LOGOUT:
-                    userLogout();
+                case SCENE_EDIT_TABLE:
+                    chooseEditTableMode();
                     break;
                 case SCENE_MENU_LIST:
                     showMenuList();
@@ -181,13 +181,12 @@ public class Controller
                     chooseEditMenuItemMode();
                     break;
                 case SCENE_TABLE:
-                    //generateSalesReports();
                     showTableList();
                     break;
-                case SCENE_EDIT_TABLE:
-                    //generateSalesReports();
-                    chooseEditTableMode();
+                case SCENE_BOOKING:
+                    showBookingList();
                     break;
+
                 default:
                     this.scene = SCENE_MAIN_MENU;
                     break;
@@ -209,7 +208,7 @@ public class Controller
         switch(userType)
         {
             case USER_ANONYMOUS:
-            if( selection <= 0 || SCENE_LOGIN < selection)
+            if( selection <= 0 || SCENE_BOOKING < selection)
                 result = false;
             break;
             case USER_EMPLOYEE:
@@ -347,7 +346,7 @@ public class Controller
         int     inputNumber = 0;
 
         cView.staffManagementView();
-        printMessageToView("Choose number:");
+        printMessageToView("Choose number:1:Add");
         key = cView.userInput();
 
         if(key.equalsIgnoreCase("Q"))   //Back to main menu
@@ -397,7 +396,50 @@ public class Controller
         int     inputNumber = 0;
 
         cView.editTableView();
-        printMessageToView("Choose number:");
+        printMessageToView("Choose number:1:Add");
+        key = cView.userInput();
+
+        if(key.equalsIgnoreCase("Q"))   //Back to main menu
+        {
+            scene = SCENE_MAIN_MENU;
+            return;
+        }
+
+        while(inputNumber == 0)
+        {
+            try
+            {
+                inputNumber = Integer.parseInt(key);
+                switch(inputNumber)
+                {
+                    case 1: //add new Table
+                        addNewTable();
+                        break;
+                    case 2:
+                        showTableList();
+                        ;
+                        break;
+
+                    default:
+                        printMessageToView("Choose 1 to 3:");
+                        key = cView.userInput();
+                        break;
+                }
+            }
+            catch(Exception e)
+            {
+                printMessageToView("Choose 1 to 3:");
+                key = cView.userInput();
+            }
+        }
+    }
+    private void chooseEditBookingMode()
+    {
+        String  key;
+        int     inputNumber = 0;
+
+        cView.addBookingView();
+        printMessageToView("Choose number:1:Add" + " :2:Display");
         key = cView.userInput();
 
         if(key.equalsIgnoreCase("Q"))   //Back to main menu
@@ -414,13 +456,10 @@ public class Controller
                 switch(inputNumber)
                 {
                     case 1: //add new employee
-                        addNewTable();
+                        addNewBooking();
                         break;
                     case 2:
-                        ;
-                        break;
-                    case 3:
-                        ;
+                        showBookingList();
                         break;
                     default:
                         printMessageToView("Choose 1 to 3:");
@@ -538,11 +577,12 @@ public class Controller
     {
         int newID=0;
         String newnumberOfSeat;
+        String status;
 
         String key;
 
         boolean done = false;
-        //-------------------- loop until new staff is added or enter "Q" ----------
+        //-------------------- loop until new Table is added or enter "Q" ----------
         while(!done)
         {
             cView.addTableView();
@@ -556,11 +596,14 @@ public class Controller
 
             printMessageToView("Enter Number Of Seat:");
             newnumberOfSeat = cView.userInput();
+            printMessageToView("Enter Status of Table:");
+            status = cView.userInput();
 
             //Check all input
             printMessageToView("--------------------------------------");
             printMessageToView("NewID:" + newID);
             printMessageToView("New number of seat:" + newnumberOfSeat);
+            printMessageToView("New Status:" + status);
 
             printMessageToView("\nOK? (Y:yes)");
             key = cView.userInput();
@@ -568,7 +611,7 @@ public class Controller
 
                 try
                 {
-                    cDatabase.addTable(newID,newnumberOfSeat);
+                    cDatabase.addTable(newID,newnumberOfSeat,status);
                     printMessageToView("New Table information is added.");
                     done = true;
                 }
@@ -580,6 +623,74 @@ public class Controller
             }
 
         //---------------- Table is added (loop end)-----------------------------
+
+        printMessageToView("Please enter something to exit");
+        key = cView.userInput();
+        scene = SCENE_MAIN_MENU;
+    }
+    //----------------------------------------------------------
+    // Add new Booking
+    //----------------------------------------------------------
+    private void addNewBooking()
+    {
+        int newID=0;
+        String Tableid="";
+        String name;
+        int duration=0;
+
+        String key;
+
+        boolean done = false;
+        //-------------------- loop until new Booking is added or enter "Q" ----------
+        while(!done)
+        {
+            cView.addBookingView();
+            newID = generateBookingId();
+            if (newID == 0)
+            {
+                //back to mein menu
+                scene = SCENE_MAIN_MENU;
+                return;
+            }
+
+            printMessageToView("choose table id from the available table list :");
+            Tableid = cView.userInput();
+            Table tableid = cDatabase.findTableByID(Integer.parseInt(Tableid));
+            if (tableid == null && tableid.getStatus() !="Available") {
+
+                printMessageToView("Enter table id again:");            }
+            else
+            printMessageToView("Enter Customer name:");
+            name = cView.userInput();
+
+            printMessageToView("Enter Time Duration in hours:");
+            duration = Integer.parseInt(cView.userInput());
+
+                //Check all input
+                printMessageToView("--------------------------------------");
+                printMessageToView("NewID:" + newID);
+                printMessageToView("New Table reserved:" + Tableid);
+                printMessageToView("New Customer name:" + name);
+               printMessageToView("New Time Duration:" + duration);
+
+                printMessageToView("\nOK? (Y:yes)");
+                key = cView.userInput();
+
+
+            try
+            {
+                cDatabase.addBooking(newID, Integer.parseInt(Tableid),name,duration);
+                printMessageToView("New Booking information is added.");
+                done = true;
+            }
+            catch(DatabaseException dbe)
+            {
+                printErrorMessageToView(dbe.getErrMessage());
+                pause(2);
+            }
+        }
+
+            //---------------- Booking is added (loop end)-----------------------------
 
         printMessageToView("Please enter something to exit");
         key = cView.userInput();
@@ -683,7 +794,52 @@ public class Controller
         }
         return newID;
     }
+    private int generateBookingId()
+    {
+        int newID = 0;
+        String key;
 
+        printMessageToView("Enter booking ID:");
+        key = cView.userInput();
+
+        while(newID == 0)
+        {
+            //Back to main menu
+            if(key.equalsIgnoreCase("Q"))
+                return 0;
+            try
+            {
+                newID = Integer.parseInt(key);
+                if(newID > 9999)
+                {
+                    printMessageToView( "Please enter less than 10000");
+                    key = cView.userInput();
+                    newID = 0;
+                }
+                else
+                {
+                    //Check if there is same ID
+                    Booking   booking = cDatabase.findBookinByID(newID);
+                    //if(found)
+                    if(booking != null)
+                    {
+                        printMessageToView( "ID:" + newID + "is already used by " + booking.getCustomerName() + " "
+                                 + ".");
+                        printMessageToView("Please try another number:");
+                        key = cView.userInput();
+                        newID = 0;
+                    }
+                }
+            }
+            catch(Exception e)
+            {
+                printMessageToView("Please enter valid integer.");
+                key = cView.userInput();
+            }
+
+        }
+        return newID;
+    }
     //----------------------------------------------------------
     // Update staff info
     //----------------------------------------------------------
@@ -989,13 +1145,7 @@ public class Controller
         int     inputNumber = 0;
 
         Staff rStaff = cDatabase.findStaffByID(currentUserID);
-        if(rStaff.getWorkState() == Staff.WORKSTATE_FINISH)
-        {
-            printErrorMessageToView("You already clocked out.");
-            pause(2);
-            scene = SCENE_MAIN_MENU;
-            return;
-        }
+
 
         while(inputNumber == 0)
         {
@@ -1930,6 +2080,14 @@ public class Controller
     private void showTableList()
     {
         cView.showTableList();
+        printMessageToView("Please enter something to exit.");
+        cView.userInput();
+        // back to main menu
+        scene = SCENE_MAIN_MENU;
+    }
+    private void showBookingList()
+    {
+        cView.showBookingList();
         printMessageToView("Please enter something to exit.");
         cView.userInput();
         // back to main menu

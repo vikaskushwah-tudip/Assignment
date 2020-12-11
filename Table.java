@@ -1,15 +1,20 @@
 public class Table {
     private int ID;
     private String NumberOfSeat;
+    private String Status;
+
 
     public Table()
     {
         ID = 0;
         NumberOfSeat="";
+        Status="";
     }
-    public Table(int ID, String numberOfSeat) {
+
+    public Table(int ID, String numberOfSeat, String status) {
         this.ID = ID;
         NumberOfSeat = numberOfSeat;
+        Status = status;
     }
 
     public int getID() {
@@ -26,6 +31,13 @@ public class Table {
 
     public void setNumberOfSeat(String numberOfSeat) {
         NumberOfSeat = numberOfSeat;
+    }
+    public String getStatus() {
+        return Status;
+    }
+
+    public void setStatus(String status) {
+        Status = status;
     }
 
 

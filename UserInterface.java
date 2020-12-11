@@ -91,8 +91,18 @@ public class UserInterface {
         if(loginUserName != "")
             displayMessage("Login user:" + loginUserName);
         displayMessage("----------[Menu]----------");
-        displayMessage("[1] Login");
         displayMessage("[H] Help");
+        displayMessage("[1] Manage Booking");
+
+        displayMessage("[2] Manage Table");
+        displayMessage("[3] Show menu list");
+        displayMessage("[4] Order management");
+        displayMessage("-------[Management]------");
+        displayMessage("[5] Show employee list");
+        displayMessage("[6] Staff management");
+        displayMessage("[7] Edit menu items");
+        displayMessage("[8] Display Table");
+        displayMessage("[9] Display Booking");
 
 
         if( userType != Controller.USER_ANONYMOUS)
@@ -211,8 +221,7 @@ public class UserInterface {
         clearScreen();
         displayTitle("Manage Table");
         displayMessage("[1] Add new Table");
-        displayMessage("[2] Delete item");
-        displayMessage("[3] Show Table detail");
+        displayMessage("[2] Show Table detail");
         displayMessage("[Q] Quit");
         displayMessage("-----------------------------------------");
     }
@@ -220,10 +229,15 @@ public class UserInterface {
     public void addTableView()
     {
         clearScreen();
-        displayTitle("Add Order Table");
+        displayTitle("Add  Table");
         showTableList();
     }
-
+    public void addBookingView()
+    {
+        clearScreen();
+        displayTitle("Add Booking a table");
+        showTableList();
+    }
     ////////////////////////////////////////////////////////////////////////////
     // Staff
     ////////////////////////////////////////////////////////////////////////////
@@ -409,8 +423,7 @@ public class UserInterface {
             }
             displayMessage(output);
             
-            /*displayMessage("Staff ID :" + re.getID()+ "  Name:"
-                                               + re.getFirstName() + " " + re.getLastName());*/
+
         }
     }
     //---------------------------------------------------------------
@@ -425,8 +438,31 @@ public class UserInterface {
         while (it.hasNext()) {
             Table re = (Table)it.next();
             String reNumberOfSeat = re.getNumberOfSeat();
-            String output = String.format("Table ID:%4d  numberOfSeat:%-20s",
-                    re.getID(), reNumberOfSeat);
+            String status = re.getStatus();
+            String output = String.format("Table ID:%4d  numberOfSeat:%-20s status:%-20s",
+                    re.getID(), reNumberOfSeat,re.getStatus());
+            displayMessage(output);
+
+        }
+    }
+    public void showBookingList()
+    {
+        clearScreen();
+        Iterator<Booking> it = crDatabase.getBookinList().iterator();
+
+        displayTitle("Booking List");
+
+        while (it.hasNext()) {
+            Booking re = (Booking) it.next();
+
+            Integer ID = re.getID();
+            Integer tableId = re.getTableId();
+            String customerName = re.getCustomerName();
+            String output = String.format("ID:%4d TableId:%4d customerName:%-20s",
+                    re.getID(), tableId,customerName);
+
+                    output += "[StartDateTime:" + re.getStartTime() + "]";
+                   output += "[EndDateTime:"  + re.getFinishTime() + "]";
             displayMessage(output);
 
         }

@@ -1,5 +1,0 @@
-*********** Order List (2020_12_10) ***********
-Order ID:   1  StaffName:Vipul J                Total:$38.85
-Order ID:   2  StaffName:Anup K               Total:$19.50
--------------------------------------------------------
-Total sales:$58.35(2)  Canceled:$0.0(0)

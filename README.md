@@ -1,15 +1,7 @@
 # Resutaurant Management System (RMS)
 ## Execute
-## Login
-You can use test data for the first time. You can add new staff or waiter when you log in as manager or admin.
-### ADMIN
-- ID:1000 Password:Welcome
-- ID:5555 Password:Whale
-
-### Staff
-* ID:1111 Password:password
-* ID:3333 Password:david  
-(Modifing the data file directly may make problem.)  
+## Login is not required Currently disabled
+## User Directly Manage all the data information
 
 ## Show menu
 You can see all menu items by clicking ALL button, and items in particular categories by clicking Drink, Alcohol, Main, or Dessert button.  
@@ -32,7 +24,7 @@ You can see all menu items by clicking ALL button, and items in particular categ
 2. Click "Close" button or "Cancel" button
 3. The order closed or canceled can not edit
 
-## Manage Employees (Admin only)
+## Manage Employees 
 ### Add new staff
 1. Click "Manage Employees" Button on the left
 2. Click "New" button
@@ -49,7 +41,7 @@ You can see all menu items by clicking ALL button, and items in particular categ
 2. Select a staff from the employees list
 3. Click "Delete" button
 
-##Manage Menu Items (Admin only)
+##Manage Menu Items 
 ###Add new item
 1. Click "Manage menu items" Button on the left
 2. Click "Add new menu item" button
@@ -66,7 +58,12 @@ You can see all menu items by clicking ALL button, and items in particular categ
 2. Select a menu item from the menu list
 3. Click "Delete menu item" button
 
-###Manage Table (Admin only)
+###Manage Table 
 1.Click "Manage Table" Button on the left
 2.Click "Add new Table" button
+3. Fill in all information and click OK
+
+###Manage Booking
+1.Click "Manage Booking" Button on the left
+2.Click "Add new Bookin" button
 3. Fill in all information and click OK

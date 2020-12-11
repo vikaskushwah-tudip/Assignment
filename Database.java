@@ -1,4 +1,5 @@
 
+import java.awt.print.Book;
 import java.util.*;
 import java.io.*;
 import java.lang.*;
@@ -12,11 +13,15 @@ public class Database
     private final static String REPORT_FILE = "dataFiles/reports/report_";
     private final static String TABLE_FILE = "dataFiles/Table.txt";
     private final static String CUSTOMER_FILE = "dataFiles/customer.txt";
+    private final static String BOOKING_FILE = "dataFiles/booking.txt";
+
     private ArrayList<Staff> staffList = new ArrayList<Staff>();
     private ArrayList<MenuItem> menuList = new ArrayList<MenuItem>();
     private ArrayList<Order> orderList = new ArrayList<Order>();
     private ArrayList<Table> tableList = new ArrayList<Table>();
     private ArrayList<Customer> customerList = new ArrayList<Customer>();
+    private ArrayList<Booking> bookingLIST = new ArrayList<Booking>();
+
 
 
     private Date    date;
@@ -39,6 +44,10 @@ public class Database
     public ArrayList<Table> getTableList()
     {
         return tableList;
+    }
+    public ArrayList<Booking> getBookinList()
+    {
+        return bookingLIST;
     }
 
     public ArrayList<MenuItem> getMenuList()
@@ -84,6 +93,29 @@ public class Database
         if(found)
             return re;
         else        
+            return null;
+    }
+    public Booking   findBookinByID(int id)
+    {
+        Iterator<Booking> it = bookingLIST.iterator();
+        Booking           re = null;
+        boolean         found = false;
+
+        if(id < 0){
+            return null;
+        }
+
+        while (it.hasNext() && !found) {
+            re = (Booking)it.next();
+            if( re.getID() == id)
+            {
+                found = true;
+            }
+        }
+
+        if(found)
+            return re;
+        else
             return null;
     }
     public Customer   findCustomerByID(int id)
@@ -302,10 +334,21 @@ public class Database
 
     }
 
-    public void addTable(int ID, String numberofseat) throws DatabaseException
+    public void addTable(int ID, String numberofseat,String status) throws DatabaseException
     {
-            Table newTable = new Table(ID, numberofseat);
+            Table newTable = new Table(ID, numberofseat,status);
             tableList.add(newTable);
+    }
+
+    public void addBooking(int ID,int TableId ,String name,int duration) throws DatabaseException
+    {
+
+        {
+            Booking booking = new Booking(ID, TableId,name,duration);
+            bookingLIST.add(booking);
+        }
+
+
     }
      //---------------------------------------------------------------
      // MenuItem
@@ -549,6 +592,7 @@ public class Database
         loadMenuFile();
         loadTableFile();
         loadCustomerFile();
+        loadBookingFile();
     }
     
     private void loadStaffFile() throws DatabaseException
@@ -601,6 +645,31 @@ public class Database
             throw new DatabaseException(message);
         }
     }
+    private void loadBookingFile() throws DatabaseException
+    {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(BOOKING_FILE));
+            String line = reader.readLine();
+
+            while (line != null) {
+                String[] record = line.split(",");
+
+                String id = record[0].trim();
+                String tableid = record[1].trim();
+                String name = record[2].trim();
+                String duration = record[3].trim();
+
+                // Add the data from file to the registerCourses array list
+                Booking booking = new Booking(Integer.parseInt(id),Integer.parseInt(tableid), name,Integer.parseInt(duration));
+                bookingLIST.add(booking);
+                line = reader.readLine();
+            }
+            reader.close();
+        } catch (IOException ioe) {
+            String message = ioe.getMessage() + ioe.getStackTrace();
+            throw new DatabaseException(message);
+        }
+    }
     private void loadTableFile() throws DatabaseException
     {
         try {
@@ -612,10 +681,11 @@ public class Database
 
                 String id = record[0].trim();
                 String numberofseat = record[1].trim();
+                String status = record[2].trim();
 
 
                 // Add the data from file to the registerCourses array list
-                Table table = new Table(Integer.parseInt(id),numberofseat);
+                Table table = new Table(Integer.parseInt(id),numberofseat,status);
                 tableList.add(table);
                 line = reader.readLine();
             }
