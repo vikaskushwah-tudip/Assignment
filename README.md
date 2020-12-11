@@ -58,12 +58,12 @@ You can see all menu items by clicking ALL button, and items in particular categ
 2. Select a menu item from the menu list
 3. Click "Delete menu item" button
 
-###Manage Table 
-1.Click "Manage Table" Button on the left
-2.Click "Add new Table" button
+###Manage Table
+1. Click "Manage Table" Button on the left
+2. Click "Add new Table" button
 3. Fill in all information and click OK
 
-###Manage Booking
-1.Click "Manage Booking" Button on the left
-2.Click "Add new Bookin" button
+###Manage Table
+1. Click "Manage Booking" Button on the left
+2. Click "Add new Booking" button
 3. Fill in all information and click OK
